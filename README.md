@@ -1,5 +1,5 @@
 # x64-asm-tcp-server
-### What
+### What:
 A simple http file server written made as a small project in x86-64 assembly.
 
 The maximum file size is 10 Mb at the moment (can be changed).
