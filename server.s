@@ -42,6 +42,23 @@ accept_connection:
 
     mov r9, rax # Store fd of connection
 
+    mov rax, 0x39
+    syscall
+
+    test rax, rax
+    jz child_process
+
+parent_process:
+    mov rdi, r9
+    mov rax, 0x3
+    syscall     # close connection to go back to accepting
+    jmp accept_connection
+
+child_process:
+    mov rdi, r8
+    mov rax, 0x3
+    syscall     # close socket
+
     mov rdi, r9
     lea rsi, [request_buffer]
     mov rdx, 1024 # Request buffer size
@@ -85,13 +102,6 @@ accept_connection:
 close_connection:
     mov rax, 0x3
     syscall     # close connection (fd still in rdi)
-
-    jmp accept_connection
-
-close_socket:
-    mov rdi, r8
-    mov rax, 0x3
-    syscall     # close socket
 
     mov rdi, 0
 exit:
